@@ -20,17 +20,27 @@ function(input, output, session) {
     kmeans(selectedData(), input$clusters)
   })
   
+
   
   
   output$plot1 <- renderPlot({
-  ###
-   ggplot(data=selectedData()) + 
-     geom_point(aes(x=clusters()$cluster,y=)) + 
-  #   geom_point(data=centers, aes(x=V1,y=V2, color=’Center’)) +
-  #   geom_point(data=centers, aes(x=V1,y=V2, color=’Center’), size=52, alpha=.3, legend=FALSE)
-  ###
-  })
+  palette(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3",
+  "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
+  
+  par(mar = c(5.1, 4.1, 0, 1))
+  ggplot(data = selectedData(), mapping = aes_string(x = input$xcol, y = input$ycol, color = clusters()$cluster)) +
+    geom_point(mapping = aes_string(x = input$xcol,y = input$ycol),color = clusters()$clusters)
+   })
 }
+
+
+
+#######################
+
+# iris_clustered <- data.frame(selectedData, cluster=factor(clusters$cluster))
+# ggplot(iris_clustered, aes(x=Sepal.Length, y=Sepal.Width, color=cluster)) + 
+#   geom_point() 
+
 
 #############################
 # output$plot1 <- renderPlot({
@@ -38,11 +48,21 @@ function(input, output, session) {
 #             "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"))
 #   
 #   par(mar = c(5.1, 4.1, 0, 1))
-#   plot(selectedData(),
-#        col = clusters()$cluster,
-#        pch = 20, cex = 3)
-#   points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
+#      ggplot(data = selectedData(),
+
+#mapping = aes_string (x = input$xcol, y = input$ycol, color = clusters()$cluster)) +
+  
+#  geom_point()
 # })
 
+##########################
 
-#, aes(x=input$xcol, y=input$ycol, color=clusters()$clusters)
+# iris_clustered <- reactive({data.frame(selectedData, cluster=factor(clusters$cluster))
+# })
+
+# output$plot1 <- renderPlot({
+#   ggplot(iris_clustered(), aes(x=names(iris_clustered[input$xcol]), 
+#                                y=names(iris_clustered[input$ycol]), 
+#                                color=iris_clustered()$cluster)) +
+#     geom_point() 
+# })
